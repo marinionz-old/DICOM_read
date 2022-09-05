@@ -41,6 +41,7 @@ end
 %%
 
 for j=1:series_num
+
     images=[];
     z_pat=[];
     Pat_pos=[];
@@ -49,15 +50,16 @@ for j=1:series_num
     pixmatrix=[];
     images=dir(series_path{j});
     len=length(images);
+    
     for p=3:len
+    
         img_info=[];
         img_name{p-2}=images(p).name;
         img_info=dicominfo([series_path{j} '\' img_name{p-2}]);
         Pat_pos{p-2}=img_info.ImagePositionPatient;
-%         slope(p-2)=img_info.RescaleSlope;
         z_pat(p-2)=Pat_pos{p-2}(3);
         pixmatrix{p-2}=dicomread(img_info);
-        p
+        
     end
      [order,index]=sort(z_pat,'descend');
      count0=0;
@@ -65,12 +67,15 @@ for j=1:series_num
          count0=count0+1;
         final_image{j}(:,:,count0)=pixmatrix{k};
      end
+     
      figure(j);
      final_image{j}=final_image{j}*img_info.RescaleSlope;
      final_image{j}=final_image{j}-img_info.RescaleIntercept;
      [x,y,z]=size(final_image{j});
+     
      % Axial
      imshow(final_image{j}(:,:,floor(z/2)),[min(final_image{j},[],'all') max(final_image{j},[],'all')]);
+     
      % Sagittal
      sag_view0=final_image{j}(:,floor(y/2),:);
      sag_view0=reshape(sag_view0,[x,z]);
@@ -78,12 +83,9 @@ for j=1:series_num
      T0 = maketfom('affine',[0 -2.5 0; 1 0 0; 0 0 0]);
      sag_view{j} = imtransform(sag_view0,T0,R2);  
      imshow(sag_view{j},[min(sag_view{j},[],'all') max(sag_view{j},[],'all')]);
+     
      % Coronal
      cor_view0=final_image{j}(floor(x/2),:,:);
      cor_view{j}=reshape(cor_view0,[y z]);
      imshow(cor_view{j},[min(cor_view{j},[],'all') max(cor_view{j},[],'all')]);
 end
-
-
-
-
