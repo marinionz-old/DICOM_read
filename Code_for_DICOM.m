@@ -2,9 +2,10 @@
 clc
 clear
 
+folder0 = ''
+directory_name = folder0 + 'HOMEWORK1';
 files=dir('C:\Users\marti\Desktop\2019-2020\2 cuatri\Advanced topics in medical image\Homeworks\Homework1_DICOM\HOMEWORK1');
 filename=[];
-folder0='C:\Users\marti\Desktop\2019-2020\2 cuatri\Advanced topics in medical image\Homeworks\Homework1_DICOM\';
 len=length(files);
 series_num=0;
 
